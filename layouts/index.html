@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DocSpine — Documentation That Stays in Sync with Your Code</title>
-  <meta name="description" content="Stop manually updating docs. DocSpine automatically generates and syncs documentation on every pull request, keeping your docs always accurate.">
+  <title>Kontext — CI/CD Friendly API Documentation Generator</title>
+  <meta name="description" content="Auto-sync API docs with your code changes. Kontext generates beautiful, always-accurate documentation that developers actually want to use.">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1022,7 +1022,7 @@
       <div class="nav-links">
         <a href="/docs/getting-started/01-install/" class="nav-link">Docs</a>
         <a href="/docs/guides/03-components-demo/" class="nav-link">Features</a>
-        <a href="https://github.com/docspine/docspine" class="nav-link" target="_blank">GitHub</a>
+        <a href="https://github.com/kontext-ai/kontext" class="nav-link" target="_blank">GitHub</a>
         <a href="/docs/getting-started/01-install/" class="nav-cta">
           Get Started
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1040,8 +1040,8 @@
     <div class="glow-orb glow-3"></div>
     <div class="container hero-content">
       <div class="hero-text">
-        <h1>Documentation that <span class="gradient">never falls behind</span> your code</h1>
-        <p class="hero-desc">Stop manually updating docs with every code change. DocSpine <strong>automatically generates and syncs documentation</strong> on every pull request — so your docs are always accurate.</p>
+        <h1>API Docs that <span class="gradient">auto-sync</span> with your code</h1>
+        <p class="hero-desc">CI/CD friendly documentation that <strong>keeps pace with your development</strong>. Kontext analyzes your FastAPI routes, generates beautiful docs, and syncs automatically with every code change — giving developers peace of mind.</p>
         <div class="hero-actions">
           <a href="/docs/getting-started/01-install/" class="btn btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1049,7 +1049,7 @@
             </svg>
             Start for free
           </a>
-          <a href="https://github.com/docspine/docspine" class="btn btn-secondary" target="_blank">
+          <a href="https://github.com/kontext-ai/kontext" class="btn btn-secondary" target="_blank">
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
             </svg>
@@ -1070,24 +1070,24 @@
               </svg>
             </div>
             <div class="pr-title-wrap">
-              <div class="pr-title">feat: Add user authentication module</div>
-              <div class="pr-meta">#142 opened by @developer</div>
+              <div class="pr-title">feat: Add new payment endpoints</div>
+              <div class="pr-meta">#89 opened by @backend-dev</div>
             </div>
             <span class="pr-badge">Open</span>
           </div>
           <div class="pr-body">
             <div class="bot-comment">
               <div class="bot-avatar">
-                <img src="/docspine-applogo.png" alt="DocSpine Bot">
+                <img src="/docspine-applogo.png" alt="Kontext Bot">
               </div>
               <div class="bot-content">
                 <div class="bot-header">
-                  <span class="bot-name">docspine</span>
+                  <span class="bot-name">kontext-bot</span>
                   <span class="bot-tag">bot</span>
                   <span class="bot-time">just now</span>
                 </div>
                 <div class="bot-message">
-                  I've analyzed your changes and updated the documentation to reflect the new authentication module.
+                  I've scanned your FastAPI routes and automatically generated API documentation for the new payment endpoints.
                 </div>
                 <div class="doc-updates">
                   <div class="doc-update-header">
@@ -1106,17 +1106,7 @@
                         <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
                       </svg>
                     </div>
-                    <span class="doc-update-file">docs/api/authentication.md</span>
-                    <span class="doc-update-status synced">Synced</span>
-                  </div>
-                  <div class="doc-update-item">
-                    <div class="doc-update-icon added">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"/>
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                      </svg>
-                    </div>
-                    <span class="doc-update-file">docs/guides/oauth-setup.md</span>
+                    <span class="doc-update-file">docs/api/payment-endpoints.mdx</span>
                     <span class="doc-update-status generated">Generated</span>
                   </div>
                   <div class="doc-update-item">
@@ -1126,7 +1116,17 @@
                         <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
                       </svg>
                     </div>
-                    <span class="doc-update-file">docs/getting-started.md</span>
+                    <span class="doc-update-file">docs/api/webhooks.mdx</span>
+                    <span class="doc-update-status synced">Synced</span>
+                  </div>
+                  <div class="doc-update-item">
+                    <div class="doc-update-icon modified">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20h9"/>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                      </svg>
+                    </div>
+                    <span class="doc-update-file">docs/api-reference.mdx</span>
                     <span class="doc-update-status synced">Synced</span>
                   </div>
                 </div>
@@ -1143,27 +1143,27 @@
     <div class="container">
       <div class="section-header">
         <div class="section-label">How it works</div>
-        <h2 class="section-title">Docs sync automatically with every commit</h2>
-        <p class="section-desc">DocSpine integrates into your existing workflow. Write code, open a PR, and your docs update themselves.</p>
+        <h2 class="section-title">Seamless integration with your CI/CD pipeline</h2>
+        <p class="section-desc">Kontext fits naturally into your development workflow. Write code, push changes, and your API docs stay current automatically.</p>
       </div>
       
       <div class="steps-grid">
         <div class="step-card">
           <div class="step-number">1</div>
-          <h3 class="step-title">Push your code</h3>
-          <p class="step-desc">Open a pull request like you normally would. DocSpine watches for changes to your codebase.</p>
+          <h3 class="step-title">Point at your codebase</h3>
+          <p class="step-desc">Run Kontext on your FastAPI project. It intelligently parses your routes, handlers, and models using tree-sitter.</p>
         </div>
         
         <div class="step-card">
           <div class="step-number">2</div>
-          <h3 class="step-title">Code changes detected</h3>
-          <p class="step-desc">DocSpine understands your code structure, API changes, and new features to generate accurate documentation updates.</p>
+          <h3 class="step-title">AI generates docs</h3>
+          <p class="step-desc">Kontext analyzes your code structure and generates comprehensive MDX documentation with examples, parameters, and responses.</p>
         </div>
         
         <div class="step-card">
           <div class="step-number">3</div>
-          <h3 class="step-title">Docs stay in sync</h3>
-          <p class="step-desc">Documentation updates are committed to your PR. Review, approve, and merge — your docs are always current.</p>
+          <h3 class="step-title">Auto-sync on changes</h3>
+          <p class="step-desc">Integrate with your CI/CD. Every code change triggers a doc update. Deploy with confidence knowing your docs are always accurate.</p>
         </div>
       </div>
     </div>
@@ -1174,11 +1174,22 @@
     <div class="container">
       <div class="section-header">
         <div class="section-label">Features</div>
-        <h2 class="section-title">Ship code faster without sacrificing docs</h2>
-        <p class="section-desc">Built for development teams who move fast and can't afford outdated documentation.</p>
+        <h2 class="section-title">Built for developers who ship fast</h2>
+        <p class="section-desc">Stop worrying about outdated API docs. Kontext handles the documentation so you can focus on building features.</p>
       </div>
       
       <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">FastAPI Native</h3>
+          <p class="feature-desc">Deep understanding of FastAPI patterns. Extracts routes, request/response models, dependencies, and error handlers automatically.</p>
+        </div>
+        
         <div class="feature-card">
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1186,21 +1197,8 @@
               <circle cx="12" cy="14" r="2"/>
             </svg>
           </div>
-          <h3 class="feature-title">Smart Generation</h3>
-          <p class="feature-desc">Automatically generates API docs, guides, and tutorials from your codebase. Understands context, not just syntax.</p>
-        </div>
-        
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="18" cy="18" r="3"/>
-              <circle cx="6" cy="6" r="3"/>
-              <path d="M13 6h3a2 2 0 0 1 2 2v7"/>
-              <path d="M6 9v12"/>
-            </svg>
-          </div>
-          <h3 class="feature-title">Pull Request Bot</h3>
-          <p class="feature-desc">Automatically comments on PRs with doc updates. Review and approve alongside your code changes.</p>
+          <h3 class="feature-title">AI-Powered Generation</h3>
+          <p class="feature-desc">Uses LangChain and OpenRouter to generate human-quality documentation with examples, edge cases, and best practices.</p>
         </div>
         
         <div class="feature-card">
@@ -1211,8 +1209,8 @@
               <path d="M21 9l-9 9"/>
             </svg>
           </div>
-          <h3 class="feature-title">Change Detection</h3>
-          <p class="feature-desc">Detects breaking changes, deprecated APIs, and new features. Updates docs to match your latest code.</p>
+          <h3 class="feature-title">CI/CD Ready</h3>
+          <p class="feature-desc">Runs in GitHub Actions, GitLab CI, or any pipeline. Detects code changes and updates docs automatically on every push.</p>
         </div>
         
         <div class="feature-card">
@@ -1222,19 +1220,19 @@
               <path d="M3 9h18M9 21V9"/>
             </svg>
           </div>
-          <h3 class="feature-title">Beautiful Output</h3>
-          <p class="feature-desc">Ships with 20+ components. Callouts, tabs, code blocks, file trees, and more — all styled perfectly.</p>
+          <h3 class="feature-title">Beautiful MDX Output</h3>
+          <p class="feature-desc">Generates Astro Starlight-compatible MDX with tabs, code blocks, callouts, and interactive components out of the box.</p>
         </div>
         
         <div class="feature-card">
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="16 18 22 12 16 6"/>
-              <polyline points="8 6 2 12 8 18"/>
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
             </svg>
           </div>
-          <h3 class="feature-title">Multi-Language</h3>
-          <p class="feature-desc">Works with Python, Go, TypeScript, Rust, and more. Parses code intelligently for each language.</p>
+          <h3 class="feature-title">Smart Parsing</h3>
+          <p class="feature-desc">Uses tree-sitter for robust code analysis. Understands imports, router graphs, handler dependencies, and call flows.</p>
         </div>
         
         <div class="feature-card">
@@ -1244,8 +1242,8 @@
               <polyline points="9 12 11 14 15 10"/>
             </svg>
           </div>
-          <h3 class="feature-title">Version Control</h3>
-          <p class="feature-desc">Docs are versioned with your code. Roll back, compare, and maintain historical documentation.</p>
+          <h3 class="feature-title">Developer Peace of Mind</h3>
+          <p class="feature-desc">Never worry about doc drift again. Your API documentation is always in sync with your actual implementation.</p>
         </div>
       </div>
     </div>
@@ -1255,32 +1253,34 @@
   <section class="integrations">
     <div class="container">
       <div class="integrations-box">
-        <h2 class="integrations-title">Works where you work</h2>
-        <p class="integrations-desc">Integrates seamlessly with your existing tools and CI/CD pipelines.</p>
+        <h2 class="integrations-title">Works with your stack</h2>
+        <p class="integrations-desc">Built for modern Python APIs and seamlessly integrates with your existing tools.</p>
         <div class="integration-logos">
+          <div class="integration-logo">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"/>
+            </svg>
+            FastAPI
+          </div>
           <div class="integration-logo">
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
             </svg>
-            GitHub
+            GitHub Actions
           </div>
           <div class="integration-logo">
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 0 1-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 0 1 4.82 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0 1 18.6 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.51L23 13.45a.84.84 0 0 1-.35.94z"/>
             </svg>
-            GitLab
+            GitLab CI
           </div>
           <div class="integration-logo">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M2.62 9.92h1.86a.42.42 0 0 0 .42-.42V7.64a.42.42 0 0 0-.42-.42H2.62a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42V7.64a.42.42 0 0 0-.42-.42H8a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42V7.64a.42.42 0 0 0-.42-.42h-1.86a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42V7.64a.42.42 0 0 0-.42-.42h-1.86a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zM2.62 15.3h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42H2.62a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42H8a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42h-1.86a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42h-1.86a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zM2.62 20.68h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42H2.62a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42H8a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42h-1.86a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42h-1.86a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42z"/>
+            <svg viewBox="0 0 24 24" fill="currentColor" style="transform: scale(1.2);">
+              <path d="M16.5 9.4c-.4-.7-1.5-.7-1.9 0L9 20.7c-.4.7.1 1.5 1 1.5h11c.9 0 1.4-.8 1-1.5l-5.5-11.3z"/>
+              <path d="M7 16.5c.4.7 1.5.7 1.9 0l4.5-9.2-6.4 9.2z"/>
+              <path d="M10.5 4L7 10.5 9 20.7c.4.7-.1 1.5-1 1.5H3c-.9 0-1.4-.8-1-1.5L7.5 4c.4-.7 1.5-.7 1.9 0l1.1 2.3z"/>
             </svg>
-            Bitbucket
-          </div>
-          <div class="integration-logo">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
-            </svg>
-            CI/CD
+            Astro
           </div>
         </div>
       </div>
@@ -1292,13 +1292,13 @@
     <div class="container">
       <div class="cta-box">
         <div class="section-label">Get started</div>
-        <h2 class="cta-title">Stop chasing code changes with manual doc updates</h2>
-        <p class="cta-desc">Install DocSpine in your repository and your docs will update themselves on every PR.</p>
+        <h2 class="cta-title">Stop worrying about outdated API documentation</h2>
+        <p class="cta-desc">Install Kontext in your CI/CD pipeline and your API docs will stay perfectly in sync with your code.</p>
         
         <div class="install-code">
           <span class="install-code-prompt">$</span>
-          <span class="install-code-text">docspine init && docspine generate</span>
-          <button class="install-code-copy" onclick="navigator.clipboard.writeText('docspine init && docspine generate')">
+          <span class="install-code-text">pip install kontext && kontext generate --target ./src</span>
+          <button class="install-code-copy" onclick="navigator.clipboard.writeText('pip install kontext && kontext generate --target ./src')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="9" width="13" height="13" rx="2"/>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
@@ -1306,7 +1306,7 @@
           </button>
         </div>
         
-        <div class="cta-or">or connect your repository</div>
+        <div class="cta-or">or add to your CI/CD pipeline</div>
         
         <div class="hero-actions" style="justify-content: center;">
           <a href="/docs/getting-started/01-install/" class="btn btn-primary">
@@ -1315,11 +1315,11 @@
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </a>
-          <a href="https://github.com/apps/docspine" class="btn btn-secondary" target="_blank">
+          <a href="https://github.com/kontext-ai/kontext" class="btn btn-secondary" target="_blank">
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
             </svg>
-            Install GitHub App
+            Star on GitHub
           </a>
         </div>
       </div>
@@ -1330,12 +1330,12 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div class="footer-text">
-        © {{ now.Year }} DocSpine. Automated documentation.
+        © {{ now.Year }} Kontext. Automated API documentation for developers.
       </div>
       <div class="footer-links">
         <a href="/docs/getting-started/01-install/" class="footer-link">Documentation</a>
-        <a href="https://github.com/docspine/docspine" class="footer-link" target="_blank">GitHub</a>
-        <a href="https://github.com/docspine/docspine/blob/main/LICENSE" class="footer-link" target="_blank">MIT License</a>
+        <a href="https://github.com/kontext-ai/kontext" class="footer-link" target="_blank">GitHub</a>
+        <a href="https://github.com/kontext-ai/kontext/blob/main/LICENSE" class="footer-link" target="_blank">MIT License</a>
       </div>
     </div>
   </footer>

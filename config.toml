@@ -1,5 +1,5 @@
-baseURL = "https://example.com/"
-title = "Nexus Documentation"
+baseURL = "https://kontext.dev/"
+title = "Kontext — CI/CD Friendly API Documentation"
 languageCode = "en-us"
 theme = "docspine"
 
@@ -7,8 +7,8 @@ theme = "docspine"
 disableKinds = ["taxonomy", "term", "RSS", "sitemap"]
 
 [params]
-  description = "The fastest way to ship professional open-source documentation"
-  github_repo = "https://github.com/your-username/your-repo"
+  description = "Auto-sync API documentation for FastAPI. CI/CD native, developer peace of mind."
+  github_repo = "https://github.com/kontext-ai/kontext"
 
 [markup]
   [markup.highlight]
