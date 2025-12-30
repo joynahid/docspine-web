@@ -1,7 +1,6 @@
 baseURL = "https://kontext.dev/"
 title = "Kontext — CI/CD Friendly API Documentation"
 languageCode = "en-us"
-theme = "docspine"
 
 # Disable unused features
 disableKinds = ["taxonomy", "term", "RSS", "sitemap"]
