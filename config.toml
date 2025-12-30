@@ -1,0 +1,29 @@
+baseURL = "https://example.com/"
+title = "Nexus Documentation"
+languageCode = "en-us"
+theme = "docspine"
+
+# Disable unused features
+disableKinds = ["taxonomy", "term", "RSS", "sitemap"]
+
+[params]
+  description = "The fastest way to ship professional open-source documentation"
+  github_repo = "https://github.com/your-username/your-repo"
+
+[markup]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = false
+    lineNos = false
+    noClasses = true
+    style = "github"
+    tabWidth = 2
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[outputs]
+  home = ["HTML"]
+  section = ["HTML"]
+  page = ["HTML"]
+

@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DocSpine — Documentation That Stays in Sync with Your Code</title>
+  <meta name="description" content="Stop manually updating docs. DocSpine automatically generates and syncs documentation on every pull request, keeping your docs always accurate.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --font-display: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-heading: "Sora", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+      
+      --bg: #0a0a0b;
+      --bg-elevated: #111113;
+      --bg-card: #16161a;
+      --border: #27272a;
+      --border-subtle: #1e1e21;
+      
+      --text: #fafafa;
+      --text-muted: #a1a1aa;
+      --text-subtle: #71717a;
+      
+      --accent: #0891b2;
+      --accent-dim: rgba(8, 145, 178, 0.15);
+      --accent-glow: rgba(8, 145, 178, 0.4);
+      
+      --purple: #a855f7;
+      --purple-dim: rgba(168, 85, 247, 0.15);
+      --green: #0d9488;
+      --green-dim: rgba(13, 148, 136, 0.12);
+      --blue: #3b82f6;
+      --blue-dim: rgba(59, 130, 246, 0.12);
+      --orange: #f97316;
+      --orange-dim: rgba(249, 115, 22, 0.12);
+      --cyan: #06b6d4;
+      --cyan-dim: rgba(6, 182, 212, 0.12);
+      --pink: #ec4899;
+      --pink-dim: rgba(236, 72, 153, 0.12);
+      --teal: #0d9488;
+      --teal-dim: rgba(13, 148, 136, 0.15);
+      --mint: #c5f5e8;
+      --mint-dim: rgba(197, 245, 232, 0.12);
+    }
+    
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    body {
+      margin: 0;
+      font-family: var(--font-display);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    
+    /* ========== Noise Texture ========== */
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.025;
+      z-index: 1000;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+    
+    /* ========== Background Effects ========== */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: 
+        linear-gradient(rgba(8, 145, 178, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8, 145, 178, 0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 70% 50% at 50% 0%, black, transparent);
+    }
+    
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(140px);
+      pointer-events: none;
+    }
+    
+    .glow-1 {
+      width: 700px;
+      height: 700px;
+      background: var(--accent-glow);
+      top: -300px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0.4;
+    }
+    
+    .glow-2 {
+      width: 500px;
+      height: 500px;
+      background: var(--purple);
+      top: 200px;
+      right: -200px;
+      opacity: 0.08;
+    }
+    
+    .glow-3 {
+      width: 400px;
+      height: 400px;
+      background: var(--cyan);
+      bottom: 0;
+      left: -150px;
+      opacity: 0.06;
+    }
+    
+    /* ========== Layout ========== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    
+    /* ========== Nav ========== */
+    .nav {
+      position: relative;
+      z-index: 100;
+      padding: 24px 0 16px;
+      background: transparent;
+    }
+    
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1.125rem;
+    }
+    
+    .logo-img {
+      height: 90px;
+      width: auto;
+    }
+    
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    
+    .nav-link {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    
+    .nav-link:hover {
+      color: var(--text);
+    }
+    
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--accent);
+      color: var(--bg);
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+    
+    .nav-cta svg {
+      width: 16px;
+      height: 16px;
+    }
+    
+    /* ========== Hero ========== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 40px 0 100px;
+    }
+    
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    
+    .hero-text {
+      max-width: 580px;
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px 8px 10px;
+      background: var(--accent-dim);
+      border-radius: 100px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+    
+    .badge-icon {
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .badge-icon svg {
+      width: 12px;
+      height: 12px;
+      color: white;
+    }
+    
+    .hero h1 {
+      margin: 0 0 28px;
+      font-family: var(--font-heading);
+      font-size: clamp(2.75rem, 5vw, 3.75rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+    
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-desc {
+      margin: 0 0 44px;
+      font-size: 1.1875rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+    
+    .hero-desc strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+    
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 32px;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      border-radius: 10px;
+      transition: all 0.25s;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+    
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    
+    .btn-primary:hover {
+      background: #0e7490;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px var(--accent-glow);
+    }
+    
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--bg-elevated);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    
+    .btn svg {
+      width: 18px;
+      height: 18px;
+    }
+    
+    /* ========== PR Demo Card ========== */
+    .demo-wrapper {
+      position: relative;
+    }
+    
+    .pr-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 
+        0 0 0 1px rgba(255,255,255,0.03),
+        0 32px 64px -16px rgba(0,0,0,0.6);
+    }
+    
+    .pr-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      background: rgba(255,255,255,0.02);
+    }
+    
+    .pr-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--teal-dim);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--teal);
+    }
+    
+    .pr-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+    
+    .pr-title-wrap {
+      flex: 1;
+    }
+    
+    .pr-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    
+    .pr-meta {
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+    }
+    
+    .pr-badge {
+      padding: 4px 10px;
+      background: var(--teal-dim);
+      border-radius: 100px;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .pr-body {
+      padding: 20px;
+    }
+    
+    .bot-comment {
+      display: flex;
+      gap: 14px;
+    }
+    
+    .bot-avatar {
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: var(--bg-elevated);
+      padding: 8px;
+    }
+    
+    .bot-avatar img {
+      width: 100%;
+      height: auto;
+    }
+    
+    .bot-content {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .bot-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    
+    .bot-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    
+    .bot-tag {
+      padding: 2px 8px;
+      background: rgba(168, 85, 247, 0.15);
+      border-radius: 4px;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--purple);
+    }
+    
+    .bot-time {
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+    }
+    
+    .bot-message {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    
+    .doc-updates {
+      background: var(--bg-elevated);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .doc-update-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.02);
+      font-size: 0.8125rem;
+      font-weight: 500;
+    }
+    
+    .doc-update-count {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--teal);
+    }
+    
+    .doc-update-count svg {
+      width: 14px;
+      height: 14px;
+    }
+    
+    .doc-update-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      font-size: 0.8125rem;
+      transition: background 0.2s;
+      opacity: 0;
+      animation: slideIn 0.4s ease forwards;
+    }
+    
+    .doc-update-item:not(:last-child) {
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    
+    .doc-update-item:nth-child(2) { animation-delay: 0.15s; }
+    .doc-update-item:nth-child(3) { animation-delay: 0.3s; }
+    .doc-update-item:nth-child(4) { animation-delay: 0.45s; }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .doc-update-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--teal-dim);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--teal);
+    }
+    
+    .doc-update-icon.modified {
+      background: var(--blue-dim);
+      color: var(--blue);
+    }
+    
+    .doc-update-icon.added {
+      background: var(--teal-dim);
+      color: var(--teal);
+    }
+    
+    .doc-update-icon svg {
+      width: 12px;
+      height: 12px;
+    }
+    
+    .doc-update-file {
+      flex: 1;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text);
+    }
+    
+    .doc-update-status {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    
+    .doc-update-status.synced {
+      background: var(--teal-dim);
+      color: var(--teal);
+    }
+    
+    .doc-update-status.generated {
+      background: rgba(168, 85, 247, 0.15);
+      color: var(--purple);
+    }
+    
+    /* ========== How It Works ========== */
+    .how-it-works {
+      padding: 120px 0;
+      position: relative;
+    }
+    
+    .section-header {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 72px;
+    }
+    
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    
+    .section-title {
+      margin: 0 0 20px;
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 3.5vw, 2.5rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+    }
+    
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 1.0625rem;
+      line-height: 1.7;
+    }
+    
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      position: relative;
+    }
+    
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 48px;
+      left: calc(16.666% + 24px);
+      right: calc(16.666% + 24px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--cyan), var(--blue));
+      opacity: 0.4;
+      z-index: 0;
+    }
+    
+    .step-card {
+      text-align: center;
+      padding: 32px 24px;
+    }
+    
+    .step-number {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 24px;
+      background: var(--bg-card);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .step-card:nth-child(1) .step-number {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    .step-card:nth-child(2) .step-number {
+      background: rgba(6, 182, 212, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    
+    .step-card:nth-child(3) .step-number {
+      background: var(--blue-dim);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+    
+    .step-title {
+      margin: 0 0 12px;
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .step-desc {
+      margin: 0;
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    
+    /* ========== Features ========== */
+    .features {
+      padding: 120px 0;
+      position: relative;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    
+    .feature-card {
+      padding: 32px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      transition: all 0.3s;
+    }
+    
+    .feature-card:hover {
+      border-color: var(--border);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 48px -16px rgba(0,0,0,0.5);
+    }
+    
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .feature-icon svg {
+      width: 26px;
+      height: 26px;
+    }
+    
+    .feature-card:nth-child(1) .feature-icon {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+    
+    .feature-card:nth-child(2) .feature-icon {
+      background: var(--purple-dim);
+      color: var(--purple);
+    }
+    
+    .feature-card:nth-child(3) .feature-icon {
+      background: var(--cyan-dim);
+      color: var(--cyan);
+    }
+    
+    .feature-card:nth-child(4) .feature-icon {
+      background: var(--blue-dim);
+      color: var(--blue);
+    }
+    
+    .feature-card:nth-child(5) .feature-icon {
+      background: rgba(234, 179, 8, 0.15);
+      color: #eab308;
+    }
+    
+    .feature-card:nth-child(6) .feature-icon {
+      background: var(--purple-dim);
+      color: var(--purple);
+    }
+    
+    .feature-title {
+      margin: 0 0 10px;
+      font-family: var(--font-heading);
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+    
+    .feature-desc {
+      margin: 0;
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    
+    /* ========== Integrations ========== */
+    .integrations {
+      padding: 80px 0 120px;
+    }
+    
+    .integrations-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 56px;
+      text-align: center;
+    }
+    
+    .integrations-title {
+      margin: 0 0 16px;
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+    
+    .integrations-desc {
+      margin: 0 0 40px;
+      color: var(--text-muted);
+      font-size: 1.0625rem;
+    }
+    
+    .integration-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    
+    .integration-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 28px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all 0.25s;
+    }
+    
+    .integration-logo:hover {
+      background: var(--bg);
+      border-color: var(--border);
+      color: var(--text);
+      transform: translateY(-3px);
+    }
+    
+    .integration-logo svg {
+      width: 28px;
+      height: 28px;
+    }
+    
+    /* ========== CTA ========== */
+    .cta {
+      padding: 80px 0 140px;
+    }
+    
+    .cta-box {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .cta-title {
+      margin: 0 0 16px;
+      font-family: var(--font-heading);
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    
+    .cta-desc {
+      margin: 0 0 40px;
+      color: var(--text-muted);
+      font-size: 1.0625rem;
+    }
+    
+    .install-code {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.9375rem;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    
+    .install-code-prompt {
+      color: var(--accent);
+      user-select: none;
+    }
+    
+    .install-code-text {
+      flex: 1;
+      color: var(--text);
+    }
+    
+    .install-code-copy {
+      padding: 10px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .install-code-copy:hover {
+      background: var(--bg-elevated);
+      color: var(--text);
+      border-color: var(--text-subtle);
+    }
+    
+    .install-code-copy svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+    
+    .cta-or {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 28px 0;
+      color: var(--text-subtle);
+      font-size: 0.875rem;
+    }
+    
+    .cta-or::before,
+    .cta-or::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    
+    /* ========== Footer ========== */
+    .footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--border-subtle);
+    }
+    
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .footer-text {
+      font-size: 0.875rem;
+      color: var(--text-subtle);
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 28px;
+    }
+    
+    .footer-link {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    
+    .footer-link:hover {
+      color: var(--text);
+    }
+    
+    /* ========== Responsive ========== */
+    @media (max-width: 1024px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+        gap: 56px;
+      }
+      
+      .hero-text {
+        max-width: 100%;
+        text-align: center;
+      }
+      
+      .hero-actions {
+        justify-content: center;
+      }
+      
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      
+      .steps-grid::before {
+        display: none;
+      }
+      
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .integrations-box {
+        padding: 40px 24px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .hero h1 {
+        font-size: 2.25rem;
+      }
+      
+      .integration-logos {
+        gap: 20px;
+      }
+      
+      .integration-logo {
+        padding: 12px 20px;
+        font-size: 0.875rem;
+      }
+      
+      .footer-inner {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+    }
+  </style>
+  
+  <script>
+    (function() {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="grid-bg"></div>
+  
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="/" class="logo">
+        <img src="/docspine-dark.png" alt="DocSpine" class="logo-img">
+      </a>
+      <div class="nav-links">
+        <a href="/docs/getting-started/01-install/" class="nav-link">Docs</a>
+        <a href="/docs/guides/03-components-demo/" class="nav-link">Features</a>
+        <a href="https://github.com/docspine/docspine" class="nav-link" target="_blank">GitHub</a>
+        <a href="/docs/getting-started/01-install/" class="nav-cta">
+          Get Started
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Hero -->
+  <section class="hero">
+    <div class="glow-orb glow-1"></div>
+    <div class="glow-orb glow-2"></div>
+    <div class="glow-orb glow-3"></div>
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1>Documentation that <span class="gradient">never falls behind</span> your code</h1>
+        <p class="hero-desc">Stop manually updating docs with every code change. DocSpine <strong>automatically generates and syncs documentation</strong> on every pull request — so your docs are always accurate.</p>
+        <div class="hero-actions">
+          <a href="/docs/getting-started/01-install/" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+            </svg>
+            Start for free
+          </a>
+          <a href="https://github.com/docspine/docspine" class="btn btn-secondary" target="_blank">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+      
+      <div class="demo-wrapper">
+        <div class="pr-card">
+          <div class="pr-header">
+            <div class="pr-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="18" cy="18" r="3"/>
+                <circle cx="6" cy="6" r="3"/>
+                <path d="M13 6h3a2 2 0 0 1 2 2v7"/>
+                <path d="M6 9v12"/>
+              </svg>
+            </div>
+            <div class="pr-title-wrap">
+              <div class="pr-title">feat: Add user authentication module</div>
+              <div class="pr-meta">#142 opened by @developer</div>
+            </div>
+            <span class="pr-badge">Open</span>
+          </div>
+          <div class="pr-body">
+            <div class="bot-comment">
+              <div class="bot-avatar">
+                <img src="/docspine-applogo.png" alt="DocSpine Bot">
+              </div>
+              <div class="bot-content">
+                <div class="bot-header">
+                  <span class="bot-name">docspine</span>
+                  <span class="bot-tag">bot</span>
+                  <span class="bot-time">just now</span>
+                </div>
+                <div class="bot-message">
+                  I've analyzed your changes and updated the documentation to reflect the new authentication module.
+                </div>
+                <div class="doc-updates">
+                  <div class="doc-update-header">
+                    <span>Documentation Changes</span>
+                    <span class="doc-update-count">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                      3 files updated
+                    </span>
+                  </div>
+                  <div class="doc-update-item">
+                    <div class="doc-update-icon modified">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20h9"/>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                      </svg>
+                    </div>
+                    <span class="doc-update-file">docs/api/authentication.md</span>
+                    <span class="doc-update-status synced">Synced</span>
+                  </div>
+                  <div class="doc-update-item">
+                    <div class="doc-update-icon added">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                      </svg>
+                    </div>
+                    <span class="doc-update-file">docs/guides/oauth-setup.md</span>
+                    <span class="doc-update-status generated">Generated</span>
+                  </div>
+                  <div class="doc-update-item">
+                    <div class="doc-update-icon modified">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20h9"/>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                      </svg>
+                    </div>
+                    <span class="doc-update-file">docs/getting-started.md</span>
+                    <span class="doc-update-status synced">Synced</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">How it works</div>
+        <h2 class="section-title">Docs sync automatically with every commit</h2>
+        <p class="section-desc">DocSpine integrates into your existing workflow. Write code, open a PR, and your docs update themselves.</p>
+      </div>
+      
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3 class="step-title">Push your code</h3>
+          <p class="step-desc">Open a pull request like you normally would. DocSpine watches for changes to your codebase.</p>
+        </div>
+        
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3 class="step-title">Code changes detected</h3>
+          <p class="step-desc">DocSpine understands your code structure, API changes, and new features to generate accurate documentation updates.</p>
+        </div>
+        
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3 class="step-title">Docs stay in sync</h3>
+          <p class="step-desc">Documentation updates are committed to your PR. Review, approve, and merge — your docs are always current.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Features -->
+  <section class="features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Ship code faster without sacrificing docs</h2>
+        <p class="section-desc">Built for development teams who move fast and can't afford outdated documentation.</p>
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z"/>
+              <circle cx="12" cy="14" r="2"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Smart Generation</h3>
+          <p class="feature-desc">Automatically generates API docs, guides, and tutorials from your codebase. Understands context, not just syntax.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="18" r="3"/>
+              <circle cx="6" cy="6" r="3"/>
+              <path d="M13 6h3a2 2 0 0 1 2 2v7"/>
+              <path d="M6 9v12"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Pull Request Bot</h3>
+          <p class="feature-desc">Automatically comments on PRs with doc updates. Review and approve alongside your code changes.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 1 1-9-9"/>
+              <polyline points="21 3 21 9 15 9"/>
+              <path d="M21 9l-9 9"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Change Detection</h3>
+          <p class="feature-desc">Detects breaking changes, deprecated APIs, and new features. Updates docs to match your latest code.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M3 9h18M9 21V9"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Beautiful Output</h3>
+          <p class="feature-desc">Ships with 20+ components. Callouts, tabs, code blocks, file trees, and more — all styled perfectly.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Multi-Language</h3>
+          <p class="feature-desc">Works with Python, Go, TypeScript, Rust, and more. Parses code intelligently for each language.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <polyline points="9 12 11 14 15 10"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Version Control</h3>
+          <p class="feature-desc">Docs are versioned with your code. Roll back, compare, and maintain historical documentation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Integrations -->
+  <section class="integrations">
+    <div class="container">
+      <div class="integrations-box">
+        <h2 class="integrations-title">Works where you work</h2>
+        <p class="integrations-desc">Integrates seamlessly with your existing tools and CI/CD pipelines.</p>
+        <div class="integration-logos">
+          <div class="integration-logo">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            GitHub
+          </div>
+          <div class="integration-logo">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 0 1-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 0 1 4.82 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0 1 18.6 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.51L23 13.45a.84.84 0 0 1-.35.94z"/>
+            </svg>
+            GitLab
+          </div>
+          <div class="integration-logo">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M2.62 9.92h1.86a.42.42 0 0 0 .42-.42V7.64a.42.42 0 0 0-.42-.42H2.62a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42V7.64a.42.42 0 0 0-.42-.42H8a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42V7.64a.42.42 0 0 0-.42-.42h-1.86a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42V7.64a.42.42 0 0 0-.42-.42h-1.86a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zM2.62 15.3h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42H2.62a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42H8a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42h-1.86a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42h-1.86a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zM2.62 20.68h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42H2.62a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42H8a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42h-1.86a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42zm5.38 0h1.86a.42.42 0 0 0 .42-.42v-1.86a.42.42 0 0 0-.42-.42h-1.86a.42.42 0 0 0-.42.42v1.86c0 .23.19.42.42.42z"/>
+            </svg>
+            Bitbucket
+          </div>
+          <div class="integration-logo">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+            </svg>
+            CI/CD
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta-box">
+        <div class="section-label">Get started</div>
+        <h2 class="cta-title">Stop chasing code changes with manual doc updates</h2>
+        <p class="cta-desc">Install DocSpine in your repository and your docs will update themselves on every PR.</p>
+        
+        <div class="install-code">
+          <span class="install-code-prompt">$</span>
+          <span class="install-code-text">docspine init && docspine generate</span>
+          <button class="install-code-copy" onclick="navigator.clipboard.writeText('docspine init && docspine generate')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="cta-or">or connect your repository</div>
+        
+        <div class="hero-actions" style="justify-content: center;">
+          <a href="/docs/getting-started/01-install/" class="btn btn-primary">
+            View documentation
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="https://github.com/apps/docspine" class="btn btn-secondary" target="_blank">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            Install GitHub App
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-text">
+        © {{ now.Year }} DocSpine. Automated documentation.
+      </div>
+      <div class="footer-links">
+        <a href="/docs/getting-started/01-install/" class="footer-link">Documentation</a>
+        <a href="https://github.com/docspine/docspine" class="footer-link" target="_blank">GitHub</a>
+        <a href="https://github.com/docspine/docspine/blob/main/LICENSE" class="footer-link" target="_blank">MIT License</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
